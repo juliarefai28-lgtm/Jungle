@@ -2,6 +2,7 @@
 //Graphics Libraries
 
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
 import java.text.AttributedString;
@@ -161,6 +162,42 @@ if (parrot.width<=20){
         }
         g.dispose();
         bufferStrategy.show();
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println("key typed " + e.getKeyCode());
+
+        //UP ARROW is 38
+        if (e.getKeyCode() == 38) {
+            System.out.println("pressed up arrow");
+            Lion.ypos = Lion.ypos - 20;
+           Lion.dy = -Math.abs(Lion.dy);
+        }
+
+        //DOWN ARROW is 40
+        System.out.println("key typed " + e.getKeyCode());
+        if (e.getKeyCode() == 40) {
+            System.out.println("pressed down arrow");
+            // astro.ypos = astro.ypos - 20;
+            Lion.dy = Math.abs(Lion.dy);
+        }
+        //Right ARROW is 39
+        System.out.println("key typed " + e.getKeyCode());
+        if (e.getKeyCode() == 39) {
+            System.out.println("pressed right arrow");
+            // astro.ypos = astro.ypos - 20;
+            Lion.dx = Math.abs(Lion.dx);
+        }
+        //Left ARROW is 37
+        System.out.println("key typed " + e.getKeyCode());
+        if (e.getKeyCode() == 37) {
+            System.out.println("pressed left arrow");
+            // astro.ypos = astro.ypos - 20;
+            Lion.dx = -Math.abs(Lion.dx);
+        }
+
     }
 }
 
