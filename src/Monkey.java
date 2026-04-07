@@ -48,7 +48,7 @@ public class Monkey {
             }
 
             hitbox = new Rectangle(xpos, ypos, width, height);
-            hitbox.setBounds(xpos, ypos, width, height);
+
         }
 
         // Method that increases the fish when it hits the seaweed

@@ -28,7 +28,6 @@ public class BasicGameApp implements Runnable {
     public Image LionPic;
 
 
-
     //Game objects
     private Monkey monkey;
     private Parrot parrot;
@@ -53,8 +52,9 @@ public class BasicGameApp implements Runnable {
         MonkeyPic = Toolkit.getDefaultToolkit().getImage("Monkey.png");
         ParrotPic = Toolkit.getDefaultToolkit().getImage("Parrot.png");
 
-
-
+    monkey= new Monkey(100,100);
+        parrot = new Parrot(300,200);
+    lion = new Lion(500,400);
     }// BasicGameApp()
 
 
@@ -81,15 +81,15 @@ public class BasicGameApp implements Runnable {
 
     // Method that checks for collisions
     public void crashing() {
+        if (monkey.hitbox != null && parrot.hitbox != null && monkey.hitbox.intersects(parrot.hitbox) && monkey.isAlive) {
+parrot.shrink();
+if (parrot.width<=20){
+    parrot.isAlive=false;
+}
 
-        // Plastic shrinks shark when they crash
-        if (monkey.hitbox.intersects(parrot.hitbox) && monkey.isAlive) {
-            parrot.shrink();
-            if (parrot.width <= 20) {// shrinks
-                parrot.isAlive = false;
-            }
         }
-    }
+        }
+
 
 
     //Method
@@ -102,63 +102,65 @@ public class BasicGameApp implements Runnable {
         }
     }
 
-// Method
+    // Method
 //Graphics setup method
-private void setUpGraphics() {
-    frame = new JFrame("Application Template");   //Create the program window or frame.  Names it.
+    private void setUpGraphics() {
+        frame = new JFrame("Application Template");   //Create the program window or frame.  Names it.
 
-    panel = (JPanel) frame.getContentPane();  //sets up a JPanel which is what goes in the frame
-    panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));  //sizes the JPanel
-    panel.setLayout(null);   //set the layout
+        panel = (JPanel) frame.getContentPane();  //sets up a JPanel which is what goes in the frame
+        panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));  //sizes the JPanel
+        panel.setLayout(null);   //set the layout
 
-    // creates a canvas which is a blank rectangular area of the screen onto which the application can draw
-    // and trap input events (Mouse and Keyboard events)
-    canvas = new Canvas();
-    canvas.setBounds(0, 0, WIDTH, HEIGHT);
-    canvas.setIgnoreRepaint(true);
+        // creates a canvas which is a blank rectangular area of the screen onto which the application can draw
+        // and trap input events (Mouse and Keyboard events)
+        canvas = new Canvas();
+        canvas.setBounds(0, 0, WIDTH, HEIGHT);
+        canvas.setIgnoreRepaint(true);
 
-    panel.add(canvas);  // adds the canvas to the panel.
+        panel.add(canvas);  // adds the canvas to the panel.
 
-    // frame operations
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //makes the frame close and exit nicely
-    frame.pack();  //adjusts the frame and its contents so the sizes are at their default or larger
-    frame.setResizable(false);   //makes it so the frame cannot be resized
-    frame.setVisible(true);      //IMPORTANT!!!  if the frame is not set to visible it will not appear on the screen!
+        // frame operations
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //makes the frame close and exit nicely
+        frame.pack();  //adjusts the frame and its contents so the sizes are at their default or larger
+        frame.setResizable(false);   //makes it so the frame cannot be resized
+        frame.setVisible(true);      //IMPORTANT!!!  if the frame is not set to visible it will not appear on the screen!
 
-    // sets up things so the screen displays images nicely.
-    canvas.createBufferStrategy(2);
-    bufferStrategy = canvas.getBufferStrategy();
-    canvas.requestFocus();
-    System.out.println("DONE graphic setup");
+        // sets up things so the screen displays images nicely.
+        canvas.createBufferStrategy(2);
+        bufferStrategy = canvas.getBufferStrategy();
+        canvas.requestFocus();
+        System.out.println("DONE graphic setup");
 
-}
-
-
-//Method that draws all game objects on the screen using buffer strategy
-private void render() {
-    Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
-    g.clearRect(0, 0, WIDTH, HEIGHT);
-
-    //Draws the background Pic first
-    g.drawImage(BackgroundPic, 0, 0, WIDTH, HEIGHT, null);
-
-    //Draws the image of the fish only if it is alive
-    if (parrot.isAlive == true) {
-        g.drawImage(ParrotPic, parrot.xpos, parrot.ypos, parrot.width, parrot.height, null);
     }
-    //Draws the image of the shark only if it is alive
-    if (monkey.isAlive == true) {
-        g.drawImage(MonkeyPic, monkey.xpos, monkey.ypos, monkey.width, monkey.height, null);
+
+
+    //Method that draws all game objects on the screen using buffer strategy
+    private void render() {
+        if (bufferStrategy == null) {
+            canvas.createBufferStrategy(2);
+            bufferStrategy = canvas.getBufferStrategy();
+            return;
+        }
+        Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
+        g.clearRect(0, 0, WIDTH, HEIGHT);
+
+        //Draws the background Pic first
+        g.drawImage(BackgroundPic, 0, 0, WIDTH, HEIGHT, null);
+
+        //Draws the image of the shark only if it is alive
+        if (monkey.isAlive == true) {
+            g.drawImage(MonkeyPic, monkey.xpos, monkey.ypos, monkey.width, monkey.height, null);
+        }
+        //Draws the image of plastic
+        g.drawImage(LionPic, lion.xpos, lion.ypos, lion.width, lion.height, null);
+
+        //Draws the image of Seaweed
+        if (parrot.isAlive) {
+            g.drawImage(ParrotPic, parrot.xpos, parrot.ypos, parrot.width, parrot.height, null);
+
+        }
+        g.dispose();
+        bufferStrategy.show();
     }
-    //Draws the image of plastic
-    g.drawImage(LionPic, lion.xpos, lion.ypos, lion.width, lion.height, null);
-
-    //Draws the image of Seaweed
-    g.drawImage(ParrotPic, parrot.xpos, parrot.ypos, parrot.width, parrot.height, null);
-
-    g.dispose();
-
-    bufferStrategy.show();
 }
 
-}
