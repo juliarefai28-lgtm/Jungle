@@ -4,13 +4,15 @@
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
 import java.text.AttributedString;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class BasicGameApp implements Runnable, KeyListener {
+public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     //Sets the width and height of the program window
     final int WIDTH = 1000;
@@ -83,10 +85,10 @@ public class BasicGameApp implements Runnable, KeyListener {
 
     // Method that checks for collisions
     public void crashing() {
-        if (monkey.hitbox != null && parrot.hitbox != null && monkey.hitbox.intersects(parrot.hitbox) && monkey.isAlive) {
+        if (monkey.hitbox != null && lion.hitbox != null && monkey.hitbox.intersects(lion.hitbox) && monkey.isAlive) {
             parrot.shrink();
-            if (parrot.width <= 20) {
-                parrot.isAlive = false;
+            if (lion.width <= 20) {
+                lion.isAlive = false;
             }
 
         }
@@ -166,44 +168,84 @@ public class BasicGameApp implements Runnable, KeyListener {
     }
 
     @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
     public void keyPressed(KeyEvent e) {
-        int code = e.getKeyCode();
-        System.out.println("key pressed" + code);
+        System.out.println("key typed " + e.getKeyCode());
 
         //UP ARROW is 38
-        if (code == 38) {
+        if (e.getKeyCode() == 38) {
             System.out.println("pressed up arrow");
             lion.ypos = lion.ypos - 20;
             lion.dy = -Math.abs(lion.dy);
         }
+
         //DOWN ARROW is 40
         System.out.println("key typed " + e.getKeyCode());
-        if (code == 40) {
+        if (e.getKeyCode() == 40) {
             System.out.println("pressed down arrow");
+            // astro.ypos = astro.ypos - 20;
             lion.dy = Math.abs(lion.dy);
         }
         //Right ARROW is 39
         System.out.println("key typed " + e.getKeyCode());
-        if (code == 39) {
+        if (e.getKeyCode() == 39) {
             System.out.println("pressed right arrow");
+            // astro.ypos = astro.ypos - 20;
             lion.dx = Math.abs(lion.dx);
         }
         //Left ARROW is 37
         System.out.println("key typed " + e.getKeyCode());
         if (e.getKeyCode() == 37) {
             System.out.println("pressed left arrow");
+            // astro.ypos = astro.ypos - 20;
             lion.dx = -Math.abs(lion.dx);
         }
     }
             @Override
             public void keyReleased(KeyEvent e){
+                System.out.println("key typed" + e.getKeyCode());
+                //UP ARROW 38
+                if (e.getKeyCode() == 38) {
+                    System.out.println("pressed up arrow");
+                    lion.dy = -2;
+                }
+                //UP ARROW 40
+                if (e.getKeyCode() == 40) {
+                    System.out.println("pressed down arrow");
+                    lion.dy = 2;
+
+                }
         }
 
-            @Override
-            public void keyTyped (KeyEvent e){
-        }
+        @Override
+        public void mouseClicked(MouseEvent e) {
 
+    }
 
-        }
+        @Override
+        public void mousePressed(MouseEvent e) {
+        System.out.println(e.getPoint());
+        lion.xpos = e.getX();
+        lion.ypos = e.getY();
+    }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+    }
+
+         @Override
+         public void mouseEntered(MouseEvent e) {
+        System.out.println("entered!!!!!!!");
+     }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+    }
+}
 
 
