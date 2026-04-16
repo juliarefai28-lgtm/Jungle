@@ -46,9 +46,7 @@ public class Lion {
             updateHitbox();
         }
 
-
         public void updateHitbox() {
             hitbox.setBounds(xpos, ypos, width, height);
         }
-
 }

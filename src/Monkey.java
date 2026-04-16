@@ -15,8 +15,6 @@ public class Monkey {
         public boolean isAlive;//a boolean to denote if the hero is alive or dead.
         public Rectangle hitbox;
 
-
-
         //This is the constructor that declares the variables
         public Monkey (int pXpos, int pYpos) {
             xpos = pXpos;

@@ -24,7 +24,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     public JPanel panel;
     public BufferStrategy bufferStrategy;
 
-
     // Game Images
     public Image BackgroundPic;
     public Image MonkeyPic;
@@ -133,7 +132,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         bufferStrategy = canvas.getBufferStrategy();
         canvas.requestFocus();
         System.out.println("DONE graphic setup");
-
     }
 
 
