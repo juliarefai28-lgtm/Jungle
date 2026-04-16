@@ -29,12 +29,14 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     public Image MonkeyPic;
     public Image ParrotPic;
     public Image LionPic;
+    public Image HunterPic;
 
 
     //Game objects
     private Monkey monkey;
     private Parrot parrot;
     private Lion lion;
+    private Hunter hunter;
 
 
     // Main method
@@ -54,10 +56,13 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         LionPic = Toolkit.getDefaultToolkit().getImage("Lion.png");
         MonkeyPic = Toolkit.getDefaultToolkit().getImage("Monkey.png");
         ParrotPic = Toolkit.getDefaultToolkit().getImage("Parrot.png");
+        HunterPic = Toolkit.getDefaultToolkit().getImage("Hunter.png");
 
         monkey = new Monkey(100, 100);
         parrot = new Parrot(300, 200);
         lion = new Lion(500, 400);
+       hunter = new Hunter(400, 300);
+
     }// BasicGameApp()
 
 
@@ -118,6 +123,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         canvas = new Canvas();
         canvas.setBounds(0, 0, WIDTH, HEIGHT);
         canvas.setIgnoreRepaint(true);
+
+        canvas.addKeyListener(this);
+        canvas.addMouseListener(this);
 
         panel.add(canvas);  // adds the canvas to the panel.
 
