@@ -22,8 +22,8 @@ public class Parrot {
         ypos = pYpos;
         dx = 5;
         dy = 4;
-        width = 60;
-        height = 60;
+        width = 70;
+        height = 70;
         isAlive = true;
         hitbox = new Rectangle(xpos, ypos, width, height);
     }
