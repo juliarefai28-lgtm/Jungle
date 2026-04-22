@@ -16,6 +16,7 @@ public class Parrot {
     public Rectangle hitbox;
 
 
+
     //Constructor that declares variables
     public Parrot(int pXpos, int pYpos) {
         xpos = pXpos;

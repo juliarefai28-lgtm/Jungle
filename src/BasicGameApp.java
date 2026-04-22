@@ -100,8 +100,13 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         // Parrot shrinks lion when they crash
         if (lion.hitbox.intersects(parrot.hitbox) && parrot.isAlive) {
             if (lion.width >= 20) {// shrinks
-                lion.isAlive = false;
+                lion.width-=5;
+                lion.height-=5;
+                lion.updateHitbox();
             }
+            System.out.println("Checking collision..");
+            System.out.println(lion.hitbox);
+            System.out.println(hunter.hitbox);
         }
     }
 
@@ -168,7 +173,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             g.drawImage(MonkeyPic, monkey.xpos, monkey.ypos, monkey.width, monkey.height, null);
         }
         //Draws the image of plastic
-        g.drawImage(LionPic, lion.xpos, lion.ypos, lion.width, lion.height, null);
+        if(lion.isAlive) {
+            g.drawImage(LionPic, lion.xpos, lion.ypos, lion.width, lion.height, null);
+        }
 
         //Draws the image of Seaweed
         if (parrot.isAlive) {
@@ -248,6 +255,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         System.out.println(e.getPoint());
         lion.xpos = e.getX();
         lion.ypos = e.getY();
+        lion.updateHitbox();
     }
 
         @Override

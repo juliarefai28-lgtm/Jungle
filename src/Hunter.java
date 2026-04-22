@@ -15,6 +15,7 @@ public class Hunter {
     public boolean isAlive;//a boolean to denote if the hero is alive or dead.
     public Rectangle hitbox;
 
+
     //This is the constructor that declares the variables
     public Hunter (int pXpos, int pYpos) {
         xpos = pXpos;
@@ -45,7 +46,7 @@ public class Hunter {
             dy = -dy;
         }
 
-        hitbox = new Rectangle(xpos, ypos, width, height);
+        hitbox.setLocation(xpos,ypos);
 
     }
 
