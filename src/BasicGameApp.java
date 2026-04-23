@@ -30,6 +30,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     public Image ParrotPic;
     public Image LionPic;
     public Image HunterPic;
+    public Image endingPic;
 
 
     //Game objects
@@ -37,6 +38,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     private Parrot parrot;
     private Lion lion;
     private Hunter hunter;
+    private boolean gameOver = false;
 
 
     // Main method
@@ -57,6 +59,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         MonkeyPic = Toolkit.getDefaultToolkit().getImage("Monkey.png");
         ParrotPic = Toolkit.getDefaultToolkit().getImage("Parrot.png");
         HunterPic = Toolkit.getDefaultToolkit().getImage("Hunter.png");
+        endingPic = Toolkit.getDefaultToolkit().getImage("EndingPic.png");
 
         monkey = new Monkey(100, 100);
         parrot = new Parrot(300, 200);
@@ -77,6 +80,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             crashing();
             render();
             pause(20);
+            gameOver();
         }
     }
 
@@ -100,8 +104,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         // Parrot shrinks lion when they crash
         if (lion.hitbox.intersects(parrot.hitbox) && parrot.isAlive) {
             if (lion.width >= 20) {// shrinks
-                lion.width-=5;
-                lion.height-=5;
+                lion.width -= 5;
+                lion.height -= 5;
                 lion.updateHitbox();
             }
             System.out.println("Checking collision..");
@@ -156,7 +160,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
 
     //Method that draws all game objects on the screen using buffer strategy
-    private void render() {
+    private void render()
+    {
+
         if (bufferStrategy == null) {
             canvas.createBufferStrategy(2);
             bufferStrategy = canvas.getBufferStrategy();
@@ -173,7 +179,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             g.drawImage(MonkeyPic, monkey.xpos, monkey.ypos, monkey.width, monkey.height, null);
         }
         //Draws the image of plastic
-        if(lion.isAlive) {
+        if (lion.isAlive) {
             g.drawImage(LionPic, lion.xpos, lion.ypos, lion.width, lion.height, null);
         }
 
@@ -186,6 +192,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         if (hunter.isAlive) {
             g.drawImage(HunterPic, hunter.xpos, hunter.ypos, hunter.width, hunter.height, null);
 
+        }
+        if (gameOver == true) {
+            g.drawImage(endingPic, 0, 0, WIDTH, HEIGHT, null);
         }
         g.dispose();
         bufferStrategy.show();
@@ -229,48 +238,56 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             lion.dx = -Math.abs(lion.dx);
         }
     }
-            @Override
-            public void keyReleased(KeyEvent e){
-                System.out.println("key typed" + e.getKeyCode());
-                //UP ARROW 38
-                if (e.getKeyCode() == 38) {
-                    System.out.println("pressed up arrow");
-                    lion.dy = -2;
-                }
-                //UP ARROW 40
-                if (e.getKeyCode() == 40) {
-                    System.out.println("pressed down arrow");
-                    lion.dy = 2;
 
-                }
+    @Override
+    public void keyReleased(KeyEvent e) {
+        System.out.println("key typed" + e.getKeyCode());
+        //UP ARROW 38
+        if (e.getKeyCode() == 38) {
+            System.out.println("pressed up arrow");
+            lion.dy = -2;
         }
+        //UP ARROW 40
+        if (e.getKeyCode() == 40) {
+            System.out.println("pressed down arrow");
+            lion.dy = 2;
 
-        @Override
-        public void mouseClicked(MouseEvent e) {
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
 
     }
 
-        @Override
-        public void mousePressed(MouseEvent e) {
+    @Override
+    public void mousePressed(MouseEvent e) {
         System.out.println(e.getPoint());
         lion.xpos = e.getX();
         lion.ypos = e.getY();
         lion.updateHitbox();
     }
 
-        @Override
-        public void mouseReleased(MouseEvent e) {
+    @Override
+    public void mouseReleased(MouseEvent e) {
 
     }
 
-         @Override
-         public void mouseEntered(MouseEvent e) {
+    @Override
+    public void mouseEntered(MouseEvent e) {
         System.out.println("entered!!!!!!!");
-     }
+    }
 
-        @Override
-        public void mouseExited(MouseEvent e) {
+    @Override
+    public void mouseExited(MouseEvent e) {
 
+    }
+
+    //Method that draws ending pic when both the shark and fish have died
+    public void gameOver() {
+        if (lion.isAlive == false) {
+            gameOver = true;
+        }
     }
 }
 

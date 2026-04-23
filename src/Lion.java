@@ -25,8 +25,8 @@ public class Lion {
         width = 90;
         height = 90;
         isAlive = true;
+        hitbox = new Rectangle(xpos, ypos, width, height);
 
-        hitbox.setBounds(xpos,ypos,width,height);
     }
 
     //The move method. Everytime this is run (or "called") the hero's x position and y position change by dx and dy
@@ -47,7 +47,7 @@ public class Lion {
         if (ypos < 0) {
             dy = -dy;
         }// Bounce of top wall
-        hitbox.setBounds(xpos,ypos,width,height);
+        hitbox = new Rectangle(xpos, ypos, width, height);
     }
 
     public void shrink() {
@@ -60,7 +60,7 @@ public class Lion {
         }
     }
         public void updateHitbox () {
-            hitbox.setBounds(xpos, ypos, width, height);
+
         }
     }
 
