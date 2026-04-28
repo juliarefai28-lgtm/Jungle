@@ -31,6 +31,10 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     public Image LionPic;
     public Image HunterPic;
     public Image endingPic;
+    public Image CoinPic;
+
+
+    private int lionCoins = 1;
 
 
     //Game objects
@@ -38,6 +42,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     private Parrot parrot;
     private Lion lion;
     private Hunter hunter;
+    private Coin coin;
     private boolean gameOver = false;
 
 
@@ -53,13 +58,13 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         setUpGraphics();
 
         //variable and objects
-        //create (construct) the objects needed for the game and load up
         BackgroundPic = Toolkit.getDefaultToolkit().getImage("Background.png");
         LionPic = Toolkit.getDefaultToolkit().getImage("Lion.png");
         MonkeyPic = Toolkit.getDefaultToolkit().getImage("Monkey.png");
         ParrotPic = Toolkit.getDefaultToolkit().getImage("Parrot.png");
         HunterPic = Toolkit.getDefaultToolkit().getImage("Hunter.png");
         endingPic = Toolkit.getDefaultToolkit().getImage("EndingPic.png");
+        CoinPic = Toolkit.getDefaultToolkit().getImage("Coin.png");
 
         monkey = new Monkey(100, 100);
         parrot = new Parrot(300, 200);
@@ -70,22 +75,21 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     }// BasicGameApp()
 
 
-    // Method
-    //Repeats while the game is running
+    // Method that repeats while the game is running
     public void run() {
 
-        //for the moment we will loop all methods forever
         while (true) {
-            moveThings();
-            crashing();
+            if (!gameOver) {
+                moveThings();
+                crashing();
+                gameOver();
+            }
             render();
             pause(20);
-            gameOver();
         }
     }
 
-    // Method
-    // Moves all the game objects
+    // Method that moves all the objects
     public void moveThings() {
         monkey.move();
         parrot.move();
@@ -93,30 +97,29 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         hunter.move();
     }
 
-    // Method that checks for collisions
+    // Method that checks for collisions/crashing
     public void crashing() {
 
+        // When hunter and lion crash the lion dies
+        if (hunter.isAlive && lion.hitbox.intersects(hunter.hitbox)) {
+            lionCoins--;
+            System.out.println("Hit! Coins :" + lionCoins);
 
-        if (hunter.isAlive && lion.isAlive && hunter.hitbox.intersects(lion.hitbox)) {
-            System.out.println("Lion died :(");
-            lion.isAlive = false;
-        }
-        // Parrot shrinks lion when they crash
-        if (lion.hitbox.intersects(parrot.hitbox) && parrot.isAlive) {
-            if (lion.width >= 20) {// shrinks
-                lion.width -= 5;
-                lion.height -= 5;
-                lion.updateHitbox();
+            if (lionCoins <= 0) {
+                lionCoins = 0;
+                gameOver = true;
+                System.out.println("Lion died");
             }
-            System.out.println("Checking collision..");
-            System.out.println(lion.hitbox);
-            System.out.println(hunter.hitbox);
+        }
+        // When parrot and lion crash the lion gets bigger
+        if (parrot.hitbox.intersects(lion.hitbox)) {
+            lion.increase();
+
         }
     }
 
 
-    //Method
-    //Pauses the game loop
+    //Method that pauses the game loop
     public void pause(int time) {
         //sleep
         try {
@@ -125,8 +128,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         }
     }
 
-    // Method
-//Graphics setup method
+    // Method with graphic setup
     private void setUpGraphics() {
         frame = new JFrame("Application Template");   //Create the program window or frame.  Names it.
 
@@ -160,8 +162,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
 
     //Method that draws all game objects on the screen using buffer strategy
-    private void render()
-    {
+    private void render() {
 
         if (bufferStrategy == null) {
             canvas.createBufferStrategy(2);
@@ -174,16 +175,16 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         //Draws the background Pic first
         g.drawImage(BackgroundPic, 0, 0, WIDTH, HEIGHT, null);
 
-        //Draws the image of the shark only if it is alive
+        //Draws the image of the monkey
         if (monkey.isAlive == true) {
             g.drawImage(MonkeyPic, monkey.xpos, monkey.ypos, monkey.width, monkey.height, null);
         }
-        //Draws the image of plastic
-        if (lion.isAlive) {
+        //Draws the image of the lion
+        if (lionCoins > 0) {
             g.drawImage(LionPic, lion.xpos, lion.ypos, lion.width, lion.height, null);
         }
 
-        //Draws the image of Seaweed
+        //Draws the image of the parrot
         if (parrot.isAlive) {
             g.drawImage(ParrotPic, parrot.xpos, parrot.ypos, parrot.width, parrot.height, null);
 
@@ -193,8 +194,15 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             g.drawImage(HunterPic, hunter.xpos, hunter.ypos, hunter.width, hunter.height, null);
 
         }
+        //Draws ending screen when game is over(lion died)
         if (gameOver == true) {
             g.drawImage(endingPic, 0, 0, WIDTH, HEIGHT, null);
+        }
+        // Draw lion coins at top left corner
+        for (int i = 0; i < lionCoins; i++) {
+            g.drawImage(CoinPic, 10 + i * 40, 10, 70, 70, null);
+
+
         }
         g.dispose();
         bufferStrategy.show();
@@ -283,10 +291,11 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     }
 
-    //Method that draws ending pic when both the shark and fish have died
+    //Method that draws ending pic when the lion has died
     public void gameOver() {
-        if (lion.isAlive == false) {
-            gameOver = true;
+        if (lion.isAlive=false) {
+            System.out.println("The lion is dead!");
+            gameOver=true;
         }
     }
 }

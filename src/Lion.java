@@ -50,17 +50,17 @@ public class Lion {
         hitbox = new Rectangle(xpos, ypos, width, height);
     }
 
-    public void shrink() {
-        //Shrinks the lion when it hits the parrot
-        if (width > 20 && height > 20) {
-            width -= 5;
-            height -= 5;
-            hitbox.setBounds(xpos,ypos,width,height);
-            System.out.println("Lion is Smaller!");
-        }
-    }
-        public void updateHitbox () {
 
+    public void increase() {
+
+        if (width > 1 && height > 1) {
+            width += 1;
+            height += 1;
+            System.out.println("Lion gets Bigger!");
         }
     }
+    public void updateHitbox() {
+
+    }
+}
 
