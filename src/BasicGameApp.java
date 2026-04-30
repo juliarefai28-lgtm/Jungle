@@ -34,7 +34,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     public Image CoinPic;
 
 
-    private int lionCoins = 1;
+    private int lionCollected= 0;
+    private int lionLives=3;
 
 
     //Game objects
@@ -42,8 +43,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     private Parrot parrot;
     private Lion lion;
     private Hunter hunter;
-    private Coin coin;
+    private Coin[] coins;
     private boolean gameOver = false;
+    private boolean showScore = false;
 
 
     // Main method
@@ -71,6 +73,14 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         lion = new Lion(500, 400);
         hunter = new Hunter(600, 300);
 
+        coins = new Coin[5];
+
+        for (int i=0; i<coins.length; i++){
+            int x= (int)(Math.random()*900);
+            int y= (int)(Math.random()*600);
+            coins[i]=new Coin(x,y);
+        }
+
 
     }// BasicGameApp()
 
@@ -95,6 +105,10 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         parrot.move();
         lion.move();
         hunter.move();
+
+        for (int i=0; i<coins.length; i++){
+            coins[i].updateHitbox();
+        }
     }
 
     // Method that checks for collisions/crashing
@@ -102,11 +116,11 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
         // When hunter and lion crash the lion dies
         if (hunter.isAlive && lion.hitbox.intersects(hunter.hitbox)) {
-            lionCoins--;
-            System.out.println("Hit! Coins :" + lionCoins);
+            lionLives--;
+            System.out.println("Hit! Coins :" + lionLives);
 
-            if (lionCoins <= 0) {
-                lionCoins = 0;
+            if (lionLives <= 0) {
+                lionLives= 0;
                 gameOver = true;
                 System.out.println("Lion died");
             }
@@ -114,7 +128,14 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         // When parrot and lion crash the lion gets bigger
         if (parrot.hitbox.intersects(lion.hitbox)) {
             lion.increase();
+        }
 
+        for (int i=0; i<coins.length; i++){
+            if (coins[i].isAlive && lion.hitbox.intersects(coins[i].hitbox)){
+                coins[i].isAlive= false;
+                lionCollected++;
+                System.out.println("Got a coins!");
+            }
         }
     }
 
@@ -180,7 +201,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             g.drawImage(MonkeyPic, monkey.xpos, monkey.ypos, monkey.width, monkey.height, null);
         }
         //Draws the image of the lion
-        if (lionCoins > 0) {
+        if (lionLives > 0) {
             g.drawImage(LionPic, lion.xpos, lion.ypos, lion.width, lion.height, null);
         }
 
@@ -197,12 +218,21 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         //Draws ending screen when game is over(lion died)
         if (gameOver == true) {
             g.drawImage(endingPic, 0, 0, WIDTH, HEIGHT, null);
+
+             if (showScore){
+                 g.setColor(Color.WHITE);
+                 g.setFont(new Font("Arial",Font.BOLD, 50));
+                 g.drawString("Coins collected:"+ lionCollected, 250,350);
+             }
         }
         // Draw lion coins at top left corner
-        for (int i = 0; i < lionCoins; i++) {
+        for (int i = 0; i < lionLives; i++) {
             g.drawImage(CoinPic, 10 + i * 40, 10, 70, 70, null);
-
-
+        }
+        for (int i=0;i<coins.length;i++){
+            if (coins[i].isAlive){
+                g.drawImage(CoinPic,coins[i].xpos, coins[i].ypos, coins[i].width, coins[i].height, null);
+            }
         }
         g.dispose();
         bufferStrategy.show();
@@ -270,10 +300,14 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println(e.getPoint());
-        lion.xpos = e.getX();
-        lion.ypos = e.getY();
-        lion.updateHitbox();
+
+        if (gameOver) {
+            showScore = true;
+            }else{
+            lion.xpos = e.getX();
+            lion.ypos = e.getY();
+            lion.updateHitbox();
+        }
     }
 
     @Override
@@ -293,7 +327,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     //Method that draws ending pic when the lion has died
     public void gameOver() {
-        if (lion.isAlive=false) {
+        if (lion.isAlive == false) {
             System.out.println("The lion is dead!");
             gameOver=true;
         }

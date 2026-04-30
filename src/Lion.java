@@ -50,7 +50,7 @@ public class Lion {
         hitbox = new Rectangle(xpos, ypos, width, height);
     }
 
-
+// When the parrot and the lion intersect the lion gets bigger
     public void increase() {
 
         if (width > 1 && height > 1) {

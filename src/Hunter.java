@@ -50,7 +50,7 @@ public class Hunter {
 
     }
 
-    // Method that increases the fish when it hits the seaweed
+    // Method that increases the lion when the hunter and the lion intersect
     public void increase() {
 
         if (width > 2 && height > 2) {
