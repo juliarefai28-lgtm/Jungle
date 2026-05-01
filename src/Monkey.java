@@ -48,14 +48,4 @@ public class Monkey {
             hitbox = new Rectangle(xpos, ypos, width, height);
 
         }
-
-        // Method that increases the fish when it hits the seaweed
-        public void increase() {
-
-            if (width > 2 && height > 2) {
-                width += 4;
-                height += 4;
-                System.out.println("Fish gets Bigger!");
-            }
-        }
     }

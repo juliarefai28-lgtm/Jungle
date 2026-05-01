@@ -47,16 +47,5 @@ public class Hunter {
         }
 
         hitbox.setLocation(xpos,ypos);
-
-    }
-
-    // Method that increases the lion when the hunter and the lion intersect
-    public void increase() {
-
-        if (width > 2 && height > 2) {
-            width += 4;
-            height += 4;
-            System.out.println("Fish gets Bigger!");
-        }
     }
 }

@@ -47,19 +47,6 @@ public class Parrot {
 
         hitbox = new Rectangle(xpos, ypos, width, height);
         hitbox.setBounds(xpos, ypos, width, height);
-    }
 
-    public void shrink() {
-        //Shrinks the shark when it hits plastic
-        if (width > 20 && height > 20) {
-            width -= 5;
-            height -= 5;
-            System.out.println("Shark is Smaller!");
-        } else {
-            //Shark disappears when it gets too small
-            isAlive = false;
-            System.out.println("Shark completly dissapears");
-
-        }
     }
 }

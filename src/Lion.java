@@ -54,8 +54,8 @@ public class Lion {
     public void increase() {
 
         if (width > 1 && height > 1) {
-            width += 1;
-            height += 1;
+            width += 1.5;
+            height += 1.5;
             System.out.println("Lion gets Bigger!");
         }
     }

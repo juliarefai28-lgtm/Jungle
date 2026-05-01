@@ -33,12 +33,12 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     public Image endingPic;
     public Image CoinPic;
 
-
+//Variables
     private int lionCollected= 0;
     private int lionLives=3;
 
 
-    //Game objects
+    //Game objects(Characters)
     private Monkey monkey;
     private Parrot parrot;
     private Lion lion;
@@ -54,12 +54,12 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         new Thread(ex).start();                 //creates a threads & starts up the code in the run( ) method
     }
 
-    // Constructor
+    // Constructor: set up game, load images, and create all game objects
     public BasicGameApp() {
 
         setUpGraphics();
 
-        //variable and objects
+        //Load images
         BackgroundPic = Toolkit.getDefaultToolkit().getImage("Background.png");
         LionPic = Toolkit.getDefaultToolkit().getImage("Lion.png");
         MonkeyPic = Toolkit.getDefaultToolkit().getImage("Monkey.png");
@@ -68,6 +68,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         endingPic = Toolkit.getDefaultToolkit().getImage("EndingPic.png");
         CoinPic = Toolkit.getDefaultToolkit().getImage("Coin.png");
 
+        //Created all game objects
         monkey = new Monkey(100, 100);
         parrot = new Parrot(300, 200);
         lion = new Lion(500, 400);
@@ -114,7 +115,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     // Method that checks for collisions/crashing
     public void crashing() {
 
-        // When hunter and lion crash the lion dies
+        // When hunter and lion crash the lion dies(dissapears)
         if (hunter.isAlive && lion.hitbox.intersects(hunter.hitbox)) {
             lionLives--;
             System.out.println("Hit! Coins :" + lionLives);
@@ -129,7 +130,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         if (parrot.hitbox.intersects(lion.hitbox)) {
             lion.increase();
         }
-
+        // Coins are collected when lion intersects them
         for (int i=0; i<coins.length; i++){
             if (coins[i].isAlive && lion.hitbox.intersects(coins[i].hitbox)){
                 coins[i].isAlive= false;
@@ -182,7 +183,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     }
 
 
-    //Method that draws all game objects on the screen using buffer strategy
+    //Method that draws all game objects on the screen
     private void render() {
 
         if (bufferStrategy == null) {
@@ -219,19 +220,29 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         if (gameOver == true) {
             g.drawImage(endingPic, 0, 0, WIDTH, HEIGHT, null);
 
+            // Shows how many coins collected once game is over
              if (showScore){
                  g.setColor(Color.WHITE);
                  g.setFont(new Font("Arial",Font.BOLD, 50));
                  g.drawString("Coins collected:"+ lionCollected, 250,350);
              }
         }
-        // Draw lion coins at top left corner
+        // Draws lion coins at top left corner
         for (int i = 0; i < lionLives; i++) {
             g.drawImage(CoinPic, 10 + i * 40, 10, 70, 70, null);
         }
-        for (int i=0;i<coins.length;i++){
-            if (coins[i].isAlive){
-                g.drawImage(CoinPic,coins[i].xpos, coins[i].ypos, coins[i].width, coins[i].height, null);
+        if (!gameOver) {
+            for (int i = 0; i < coins.length; i++) {
+                if (coins[i].isAlive) {
+                    g.drawImage(CoinPic, coins[i].xpos, coins[i].ypos, coins[i].width, coins[i].height, null);
+                }
+            }
+        }else{
+            g.drawImage(endingPic,0,0,WIDTH,HEIGHT,null);
+            if(showScore){
+                g.setColor(Color.WHITE);
+                g.setFont(new Font("Arial",Font.BOLD, 50));
+                g.drawString("Coins collected:"+ lionCollected, 250,500);
             }
         }
         g.dispose();
@@ -242,7 +253,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     @Override
     public void keyTyped(KeyEvent e) {
     }
-
+    // Controls keys
     @Override
     public void keyPressed(KeyEvent e) {
         System.out.println("key typed " + e.getKeyCode());
@@ -258,21 +269,18 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         System.out.println("key typed " + e.getKeyCode());
         if (e.getKeyCode() == 40) {
             System.out.println("pressed down arrow");
-            // astro.ypos = astro.ypos - 20;
             lion.dy = Math.abs(lion.dy);
         }
         //Right ARROW is 39
         System.out.println("key typed " + e.getKeyCode());
         if (e.getKeyCode() == 39) {
             System.out.println("pressed right arrow");
-            // astro.ypos = astro.ypos - 20;
             lion.dx = Math.abs(lion.dx);
         }
         //Left ARROW is 37
         System.out.println("key typed " + e.getKeyCode());
         if (e.getKeyCode() == 37) {
             System.out.println("pressed left arrow");
-            // astro.ypos = astro.ypos - 20;
             lion.dx = -Math.abs(lion.dx);
         }
     }
@@ -297,7 +305,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     public void mouseClicked(MouseEvent e) {
 
     }
-
+    // Shows how many coins collected once mouse pressed
     @Override
     public void mousePressed(MouseEvent e) {
 
